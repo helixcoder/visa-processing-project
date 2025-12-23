@@ -21,7 +21,7 @@ Target variable:
 atrice
 processing_time_days = decision_date - received_date
 -
-## Step 1: Collection and Preprocessing of Data
+## Milestone 1 - Collection and Preprocessing of Data
 - Loaded and preprocessed raw visa data
 • Dealt with missing values
 
