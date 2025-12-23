@@ -164,3 +164,102 @@ else:
 from google.colab import files
 
 files.download(OUTPUT_PATH)
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.style.use("default")
+sns.set_context("notebook")
+
+DATA_PATH = "/content/us_perm_visas_preprocessed.csv"
+
+df = pd.read_csv(DATA_PATH)
+print("Dataset shape:", df.shape)
+
+df = df[df['processing_time_days'].notna()]
+df.head()
+
+plt.figure(figsize=(8,5))
+sns.histplot(df['processing_time_days'], bins=50, kde=True)
+plt.title("Distribution of Visa Processing Time (Days)")
+plt.xlabel("Processing Time (Days)")
+plt.ylabel("Frequency")
+plt.show()
+
+visa_col = next((c for c in df.columns if 'visa' in c.lower() or 'class' in c.lower()), None)
+
+if visa_col:
+    plt.figure(figsize=(10,5))
+    sns.boxplot(data=df, x=visa_col, y='processing_time_days')
+    plt.xticks(rotation=45)
+    plt.title("Processing Time by Visa Type")
+    plt.show()
+else:
+    print("Visa type column not found")
+
+region_col = next((c for c in df.columns if 'country' in c.lower()), None)
+
+if region_col:
+    top_regions = df[region_col].value_counts().head(10).index
+    region_df = df[df[region_col].isin(top_regions)]
+
+    plt.figure(figsize=(10,5))
+    sns.boxplot(data=region_df, x=region_col, y='processing_time_days')
+    plt.xticks(rotation=45)
+    plt.title("Processing Time by Applicant Origin (Top 10 Countries)")
+    plt.show()
+else:
+    print("Region column not found")
+
+date_col = next((c for c in df.columns if 'date' in c.lower()), None)
+
+if date_col:
+    df[date_col] = pd.to_datetime(df[date_col], errors='coerce')
+    df['month'] = df[date_col].dt.month
+
+    plt.figure(figsize=(8,5))
+    sns.lineplot(data=df, x='month', y='processing_time_days')
+    plt.title("Seasonal Trend in Visa Processing Time")
+    plt.xlabel("Month")
+    plt.ylabel("Average Processing Time (Days)")
+    plt.show()
+else:
+    print("Date column not found")
+
+center_col = next((c for c in df.columns if 'center' in c.lower()), None)
+
+if center_col:
+    workload = df.groupby(center_col)['processing_time_days'].mean().sort_values(ascending=False).head(10)
+
+    workload.plot(kind='bar', figsize=(10,5))
+    plt.title("Average Processing Time by Processing Center")
+    plt.ylabel("Days")
+    plt.show()
+else:
+    print("Processing center column not found")
+
+numeric_df = df.select_dtypes(include=['int64','float64'])
+
+plt.figure(figsize=(10,6))
+sns.heatmap(numeric_df.corr(), cmap="coolwarm", center=0)
+plt.title("Feature Correlation Heatmap")
+plt.show()
+
+from sklearn.ensemble import RandomForestRegressor
+
+X = numeric_df.drop(columns=['processing_time_days'], errors='ignore')
+y = df['processing_time_days']
+
+rf = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+rf.fit(X, y)
+
+importance = pd.Series(rf.feature_importances_, index=X.columns)
+importance = importance.sort_values(ascending=False).head(10)
+
+plt.figure(figsize=(8,5))
+importance.plot(kind='bar')
+plt.title("Top 10 Feature Importances")
+plt.ylabel("Importance Score")
+plt.show()
