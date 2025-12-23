@@ -1,48 +1,44 @@
-Visa Processing Time Prediction – Machine Learning Project
+# Visa Processing Time Prediction – Machine Learning Project
 
-This project applies machine learning to forecast **visa processing duration in days.
+# Overview
+This project aims to forecast the visa processing time, which takes days.
 
-It follows the entire workflow: **data collection → preprocessing → EDA → model training → evaluation**.
+It is based on an organized workflow process that includes data processing, exploration, and training.
 
 ---
-Objective:
-Provide a model that predicts how many days a visa application will take using some of the following attributes:
-- Information about the employer
-Job details
-- Wage
+# Objective
+The
+For calculating the visa issuance time based on:
+- Employer information
+- Job details
+- Salary
 
-Date received: date; Date accepted: date (to be filled in by the Publisher)
+- Dates of receiving applications and decision
 
-Application country
+- Applicant country
 
-That is how, at end, the relationship has been specified; it is the fate of men and women.
-Milestone 1 – Data Collection & Preprocessing
-### Steps Completed ✔
-- Loaded raw visa dataset
-Cleaned and handled missing values
-- Parsed date columns
+Target variable:
+atrice
+processing_time_days = decision_date - received_date
+-
+## Step 1: Collection and Preprocessing of Data
+- Loaded and preprocessed raw visa data
+• Dealt with missing values
 
-- Generate target variable `processing_time_days`
+- Parsed Date Columns
 
-- Encoded categorical variables (One-hot + Frequency encoding)
-- Saved processed, clean dataset
+- Created processing_time_days
+- Coded categorical variables
+- Saved preprocessed dataset
 ---
-EDA (Exploratory Data Analysis)
-EDA notebook includes:
-- Distributions of processing time
+## Milestone 2 - Exploratory Data Analysis (EDA)
 
-- Heatmap of missing values
+- Processing Time Distribution Analysis
 
-Country-wise trends
-- Correlation heatmap
-- Frequency analysis by employer
-sticking to and maintaining a balance between unbalanced power with the appropriate use of relevant instruments.
-Model Training (Milestone 2)
+- Country-wise trends
+- Employer frequency analysis
+- Correlation Analysis
+• Insights on the importance of features
+---
 
-Algorithms used:
-- Linear Regression
-- Random Forest
-
-- Gradient Boosting
-
--XGBoost Metrics assessed: - **MAE** - **RMSE** - **R² Score** "--- Project Structure
+# Training of the Model Algorithms employed: - Linear Regression - Random Forest - Gradient Boosting - XGBoost
